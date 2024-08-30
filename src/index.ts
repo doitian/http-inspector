@@ -13,6 +13,12 @@
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+		const body = await request.text();
+		console.log(`${request.method} ${request.url}`);
+		for (const pair of request.headers.entries()) {
+			console.log(`${pair[0]}: ${pair[1]}`);
+		}
+		console.log(`\n${body}`);
+		return new Response('OK');
 	},
 } satisfies ExportedHandler<Env>;
