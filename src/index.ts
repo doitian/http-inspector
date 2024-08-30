@@ -13,12 +13,18 @@
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
+		const log_key = `${new Date().toISOString()}-${request.cf?.asn}`;
 		const body = await request.text();
-		console.log(`${request.method} ${request.url}`);
+		const log_value: { method: string; url: string; body: string; headers: Record<string, string> } = {
+			method: request.method,
+			url: request.url,
+			body: body,
+			headers: {},
+		};
 		for (const pair of request.headers.entries()) {
-			console.log(`${pair[0]}: ${pair[1]}`);
+			log_value.headers[pair[0]] = pair[1];
 		}
-		console.log(`\n${body}`);
+		env.LOGS.put(log_key, JSON.stringify(log_value));
 		return new Response('OK');
 	},
 } satisfies ExportedHandler<Env>;
