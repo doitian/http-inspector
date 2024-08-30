@@ -24,7 +24,7 @@ export default {
 		for (const pair of request.headers.entries()) {
 			log_value.headers[pair[0]] = pair[1];
 		}
-		env.LOGS.put(log_key, JSON.stringify(log_value));
+		ctx.waitUntil(env.LOGS.put(log_key, JSON.stringify(log_value)));
 		return new Response('OK');
 	},
 } satisfies ExportedHandler<Env>;
